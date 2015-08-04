@@ -1,26 +1,31 @@
-var Parcel = require('./parcel.model');
+var Suburb = require('./suburb.model');
 var SphereMercator = require('sphericalmercator');
 var utils = require('../../utils');
 
 
 exports.index = function(req, res, next) {
 
-  Parcel
+  Suburb
     .find()
     .limit(100)
+    .lean()
     .exec(function(err, docs) {
     if (err) return next(err);
     if (!docs) return next(new Error('Oops nothing found.'));
+    var geojson = {
+      "type": "FeatureCollection",
+      "features": docs
+    };
     // cache controller for nginx
-    // res.header("Cache-Control", "public, max-age=300");
-    res.status(200).json(docs);
+    res.header("Cache-Control", "public, max-age=300");
+    res.status(200).json(geojson);
   });
 
 };
 
 exports.show = function(req, res, next) {
 
-  Parcel.findById(req.params.id, function(err, doc) {
+  Suburb.findById(req.params.id, function(err, doc) {
     if (err) return next(err);
     if (!doc) return next(new Error('Oops nothing found.'));
     res.status(200).json(doc);
@@ -41,25 +46,24 @@ exports.tile = function(req, res, next) {
 
   var bbox = mercator.bbox(params.x, params.y, params.z, false, '4326');
 
-  var latlo = bbox[1],
-      lnglo = bbox[0],
-      lathi = bbox[3],
-      lnghi = bbox[2];
+  var latlo = parseFloat(bbox[1]),
+      lnglo = parseFloat(bbox[0]),
+      lathi = parseFloat(bbox[3]),
+      lnghi = parseFloat(bbox[2]);
 
   var bound = {
     type: "Polygon",
     coordinates: [[[lnglo,latlo],[lnglo,lathi],[lnghi,lathi],[lnghi,latlo],[lnglo,latlo]]]
   };
 
-  Parcel
+  Suburb
     .find()
     .where('geometry').intersects(bound)
-    .select('geometry')
+    .select('-properties')
     .lean()
-    .exec(function(err, docs) {
+    .exec(function(err, data) {
     if (err) return next(err);
-
-    utils.generateMapnikStyle(__dirname + '/parcel.style.xml', geojson, function(err, xml) {
+    utils.generateMapnikStyle(__dirname + '/suburb.style.xml', data, function(err, xml) {
       utils.generateMapnikResponse(xml, params, res, next);
     });
   });

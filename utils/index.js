@@ -5,7 +5,13 @@ var mapnik = require('mapnik');
 var zlib = require('zlib');
 var SphereMercator = require('sphericalmercator');
 
-exports.generateMapnikStyle = function(path, geojson, callback) {
+exports.generateMapnikStyle = function(path, data, callback) {
+
+  var geojson = {
+    "type": "FeatureCollection",
+    "features": data
+  };
+
   fs.readFile(path, 'utf8', function(err, xml) {
     if (err) return callback(err);
     return callback(null, xml.replace('{{geojson}}', JSON.stringify( geojson ) ));
@@ -21,7 +27,7 @@ exports.generateMapnikResponse = function(xml, params, res, callback) {
   var map = new mapnik.Map(256, 256);
   map.extent = mercator.bbox(params.x, params.y, params.z, false, '900913');
 
-  res.header("Cache-Control", "public, max-age=300");
+  //res.header("Cache-Control", "public, max-age=300");
 
   map.fromString( xml, function(err,map) {
     if (err) return callback(err);

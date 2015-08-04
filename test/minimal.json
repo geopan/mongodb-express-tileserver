@@ -1,0 +1,44 @@
+{
+  "version": 7,
+  "sprite": "https://www.mapbox.com/mapbox-gl-styles/sprites/bright",
+  "constants": {
+    "@water": "#88aacc",
+    "@land": "#ffffff"
+  },
+  "sources": {
+    "dark": {
+      "type": "raster",
+      "url": "mapbox://gis-vocus.4c2cef45",
+      "tileSize": 256
+    },
+    "suburb": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:8080/suburbs/tile/{z}/{x}/{y}.pbf"
+      ],
+      "minzoom": 8,
+      "maxzoom": 18
+    }
+  },
+  "layers": [
+    {
+      "id": "dark",
+      "type": "raster",
+      "source": "dark",
+      "source-layer": "dark"
+    }, {
+      "id": "test",
+      "type": "fill",
+      "interactive" :true,
+      "source": "suburb",
+      "source-layer": "suburb",
+      "paint": {
+        "fill-color": "@water",
+        "fill-outline-color": "@land",
+        "fill-outline-opacity": 1,
+        "fill-opacity": {
+          "stops": [[10, 0.6], [18, 0.4]]
+        }
+      }
+    }]
+}

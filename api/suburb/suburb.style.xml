@@ -1,0 +1,26 @@
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" background-color="transparent" buffer-size="128">
+  <Parameters>
+    <Parameter name="format">png8</Parameter>
+    <Parameter name="scale">1</Parameter>
+    <Parameter name="metatile">2</Parameter>
+    <Parameter name="id"><![CDATA[mapnik]]></Parameter>
+    <Parameter name="name"><![CDATA[mapnik]]></Parameter>
+    <Parameter name="tilejson"><![CDATA[2.0.0]]></Parameter>
+    <Parameter name="scheme"><![CDATA[xyz]]></Parameter>
+  </Parameters>
+
+  <Style name="Suburb">
+    <Rule>
+      <PolygonSymbolizer fill="#e31a1c" fill-opacity="0.4" />
+      <LineSymbolizer stroke="#3b3b3b" stroke-width="1" />
+    </Rule>
+  </Style>
+
+  <Layer name="Suburb" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" buffer-size="128">
+    <StyleName>Suburb</StyleName>
+    <Datasource>
+      <Parameter name="type">geojson</Parameter>
+      <Parameter name="inline"><![CDATA[{{geojson}}]]></Parameter>
+    </Datasource>
+  </Layer>
+</Map>
