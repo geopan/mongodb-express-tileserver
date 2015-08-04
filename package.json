@@ -1,0 +1,17 @@
+{
+  "name": "mongodb-express-tileserver",
+  "version": "0.1.0",
+  "main": "app.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "async": "0.9.x",
+    "body-parser": "1.12.x",
+    "express": "4.12.x",
+    "mapnik": "3.4.x",
+    "mongoose": "4.0.x",
+    "morgan": "^1.6.1",
+    "sphericalmercator": "1.0.x"
+  }
+}
